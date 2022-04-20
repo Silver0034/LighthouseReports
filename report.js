@@ -35,17 +35,6 @@ let csvString = ''
 	const options = {
 		logLevel: 'info',
 		output: 'csv',
-		onlyCategories: [
-			'performance',
-			'accessibility',
-			'best-practices',
-			'seo'
-		],
-		audits: [
-			'first-meaningful-paint',
-			'first-cpu-idle',
-			'byte-efficiency/uses-optimized-images'
-		],
 		port: chrome.port
 	}
 
@@ -141,8 +130,13 @@ let csvString = ''
 		}
 	}
 
+	// make output directory if it doesn't exist
+	const outputDir = './output'
+	if (!fs.existsSync(outputDir)) {
+		fs.mkdirSync(outputDir)
+	}
 	// output scores to csv
-	fs.writeFileSync(`./output/${outputName}`, csvString)
+	fs.writeFileSync(`${outputDir}/${outputName}`, csvString)
 
 	// kill chrome at end
 	await chrome.kill()
