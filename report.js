@@ -119,13 +119,22 @@ let csvString = ''
 
 			// average scores and add to csv
 			for (const category in scores) {
-				// add each score to sum
-				const sum = scores[category].reduce((a, b) => a + b)
-				const average = sum / scores[category].length
-				if (!average) 'NA'
+				// remove all empty and non-number values from array
+				const filteredScores = scores[category].filter((value) => {
+					return !isNaN(parseFloat(value)) && isFinite(value)
+				})
 
-				// add to csv
-				csvString += `, ${Math.floor(average)}`
+				// add each score to sum
+				if (filteredScores.length) {
+					const sum = filteredScores.reduce((a, b) => a + b)
+					const average = sum / filteredScores.length
+
+					// add to csv
+					csvString += `, ${Math.floor(average)}`
+				} else {
+					// add N/A to score
+					csvString += `, N/A`
+				}
 			}
 		}
 	}
